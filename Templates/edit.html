@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block body %}
+<header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold text-gray-900">
+            {{ data.Title }}
+        </h1>
+    </div>
+</header>
+{% if message %}
+<div class="header-body heading" id="popup">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!!</strong> {{message}}
+    </div>
+</div>
+{% endif %}
+
+<div class="card-wrapper">
+    <div class="card">
+        <!-- card left -->
+        <div class="product-imgs">
+            <div class="img-display">
+                <div class="img-showcase">
+                    <img src="https://source.unsplash.com/600x500/?gym" alt="image">
+                </div>
+            </div>
+            <div class="img-select">
+                <div class="img-item">
+                    <a href="#" data-id="1">
+                        <img src="https://source.unsplash.com/600x500/?sports" alt="image">
+                    </a>
+                </div>
+                <div class="img-item">
+                    <a href="#" data-id="2">
+                        <img src="https://source.unsplash.com/600x500/?gym,sports" alt="image">
+                    </a>
+                </div>
+                <div class="img-item">
+                    <a href="#" data-id="3">
+                        <img src="https://source.unsplash.com/600x500/?athlete" alt="image">
+                    </a>
+                </div>
+                <div class="img-item">
+                    <a href="#" data-id="4">
+                        <img src="https://source.unsplash.com/600x500/?gym,athlete" alt="image">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- card right -->
+        <div class="product-content">
+            <h2 class="product-title">{{ data.Title }}</h2>
+            <a href="#" class="product-link">{{ data.Subtitle }}</a>
+
+            <div class="product-price">
+                <p class="new-price">Start Date: <span>{{ data.Start }}</span></p>
+                <p class="new-price">End Date: <span>{{ data.End }}</span></p>
+            </div>
+
+            <div class="product-price">
+                <p class="new-price">Scheduled By: <span>{{ data.owner.username }}</span></p>
+            </div>
+
+            <div class="product-detail">
+                <h2>Description: </h2>
+                <p>{{ data.Description }}</p>
+
+                <h3>Subscribed User</h3>
+                <ul>
+                    {% for i in users %}
+                    <li>{{ i.username }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% if current_user.role == "Member" %}
+            <form method="POST" action="/class/{{ data.id}}/">
+                <div class="purchase-info">
+                    <button type="submit" class="btn">
+                        Subscribe <i class="fas fa-shopping-cart"></i>
+                </div>
+            </form>
+            {% endif %}
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let ab = document.getElementById("popup");
+    if (ab) {
+        setTimeout(() => {
+            ab.remove();
+        }, 2000);
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block body %}
+<style>
+    .buttom{
+        position: absolute;
+        top:80px;
+        right:13px;
+    }
+</style>
+<header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold text-gray-900">
+            Admin Panel
+        </h1>
+    </div>
+</header>
+
+{% if message %}
+<div class="header-body heading" id="popup">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!!</strong> {{message}}
+    </div>
+</div>
+{% endif %}
+
+<button id="tablesModify" value="All Class" class="buttom inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    All Class
+  </button>
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="flex flex-col mt-4" style="max-height:700px; overflow-y: scroll;" id="users">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Id
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Password
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Role
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add User</button>
+                            </th>
+                            <th scope="col" class="relative px-6 py-3">
+                                <span class="sr-only">Delete</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for i in user %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ i.id }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ i.username }}
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            {{ i.email }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ i.password }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    {{ i.role }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="/deleteuser/{{ i.id }}/" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Username</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Password</label>
+                        <input type="text" class="form-control" id="password" name="password"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Role</label>
+                        <select
+                            class="block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4 md:w-full "
+                            required="required" name="role" id="role">
+                            <option value="Trainer">Trainer</option>
+                            <option value="Member">Member</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="flex flex-col mt-4" style="max-height:700px; overflow-y: scroll;" id="class">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Id
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Title
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Start Date
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                End Date
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Trainer Name
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal1" data-bs-whatever="@mdo">Add Class</button>
+                            </th>
+                            <th scope="col" class="relative px-6 py-3">
+                                <span class="sr-only">Delete</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for i in clas %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ i.id }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ i.Title }}
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            {{ i.Subtitle }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    {{ i.Start }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    {{ i.End }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    {{ i.owner.username }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="/delete/{{ i.id }}/" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Class</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">SubTitle</label>
+                        <input type="text" class="form-control" id="sub" name="sub">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Start Date</label>
+                        <input type="datetime-local" class="form-control" id="start" name="start"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">End Date</label>
+                        <input type="datetime-local" class="form-control" id="end" name="end"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Trainer Name</label>
+                        <select
+                            class="block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4 md:w-full "
+                            required="required" name="trainer" id="trainer">
+                            {% for i in trainer %}
+                            <option value="{{ i.id }}">{{ i.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Description</label>
+                        <textarea type="text" class="form-control" id="desc" name="desc"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Schedule</button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    let ab = document.getElementById("popup");
+    if (ab) {
+      setTimeout(() => {
+        ab.remove();
+      }, 2000);
+    }
+    const data = document.getElementById("tablesModify"); 
+    data.addEventListener("click",(e)=>{
+        if(e.target.value == "All Class"){
+            e.target.value ="Users";
+            data.innerHTML = "All Class";
+        }
+        else if(e.target.value == "Users"){
+            e.target.value = "All Class";
+            data.innerHTML = "Users";
+        }
+    })
+
+    setInterval(()=>{
+        const user = document.getElementById("class");
+        const button = document.getElementById("tablesModify");
+        const data = document.getElementById("users");
+        if(button.value == "All Class"){
+            user.style.display = "none";
+            data.style.display = "block";
+        }
+        else{
+            user.style.display = "block";
+            data.style.display = "none";
+        }
+    },1000);
+</script>
+
+{% endblock %}
