@@ -11,7 +11,7 @@ from wtforms.validators import InputRequired, Length, ValidationError, EqualTo
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/fitness"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://jjjezeiamcjwsg:b36686bd01b55583fc21679e43f09401b2d0c423a774ef9d3f9597d2a2b478d4@ec2-34-225-103-117.compute-1.amazonaws.com:5432/d1vno750bgmreg"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.config['SECRET_KEY'] = 'the random string'
 db = SQLAlchemy(app)
@@ -149,6 +149,8 @@ def edit(id):
                 message = "Something Error happened"
     return render_template("edit.html",data=classData,message=message,users=subscribedUsers)
 
+
+
 @app.route("/delete/<string:id>/",methods=["GET","POST"])
 def delete(id):
     classData = Event.query.filter_by(id=id).first()
@@ -213,4 +215,4 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
